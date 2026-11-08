@@ -1,5 +1,5 @@
-// NIDO c88721fc6b: funciona sin internet. La app se guarda al instalarla; las fuentes se guardan la primera vez que cargan.
-const CACHE = 'nido-c88721fc6b';
+// NIDO 4a48a5a830: funciona sin internet. La app se guarda al instalarla; las fuentes se guardan la primera vez que cargan.
+const CACHE = 'nido-4a48a5a830';
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE && k.startsWith('nido-')).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
