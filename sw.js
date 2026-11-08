@@ -1,5 +1,5 @@
-// NIDO f63d7b01a0: funciona sin internet. La app se guarda al instalarla; las fuentes se guardan la primera vez que cargan.
-const CACHE = 'nido-f63d7b01a0';
+// NIDO 166d8b9300: funciona sin internet. La app se guarda al instalarla; las fuentes se guardan la primera vez que cargan.
+const CACHE = 'nido-166d8b9300';
 const SHELL = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== CACHE && k.startsWith('nido-')).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
@@ -12,6 +12,7 @@ self.addEventListener('fetch', (e) => {
 // Avisos: el servidor manda {title, body, tag}; al tocarlo se abre NIDO.
 self.addEventListener('push', (e) => {
   let d = {}; try { d = e.data ? e.data.json() : {}; } catch (x) { d = { title: 'NIDO', body: e.data ? e.data.text() : '' }; }
+  try { if (d.badge != null && self.navigator.setAppBadge) self.navigator.setAppBadge(d.badge); } catch (x) { }
   e.waitUntil(self.registration.showNotification(d.title || 'NIDO', { body: d.body || '', tag: d.tag || 'nido', renotify: true, icon: 'icon-192.png', badge: 'icon-192.png', data: { url: './' } }));
 });
 self.addEventListener('notificationclick', (e) => {
